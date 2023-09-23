@@ -10,13 +10,14 @@ PKG="rancher/confd"
 rm -rf bin/*
 mkdir -p bin
 
-for platform in darwin linux windows; do \
-  if [ $platform == windows ]; then extension=.exe; fi; \
-  GOOS=$platform GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="-s -w -X main.GitSHA=${GIT_SHA}" -o bin/confd-${VERSION}-$platform-amd64$extension; \
+for platform in darwin linux; do \
+  echo "$(date) - Building ${platform}"
+  GOOS=$platform GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="-s -w -X main.GitSHA=${COMMIT} -X main.Version=${VERSION}" -o bin/confd-${VERSION}-$platform-amd64; \
   if [ $platform == linux ]; then \
-  GOOS=$platform GOARCH=arm CGO_ENABLED=0 go build -ldflags="-s -w -X main.GitSHA=${GIT_SHA}" -o bin/confd-${VERSION}-linux-arm; \
-  GOOS=$platform GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w -X main.GitSHA=${GIT_SHA}" -o bin/confd-${VERSION}-linux-arm64; \
+  GOOS=$platform GOARCH=arm CGO_ENABLED=0 go build -ldflags="-s -w -X main.GitSHA=${COMMIT} -X main.Version=${VERSION}" -o bin/confd-${VERSION}-linux-arm; \
+  GOOS=$platform GOARCH=arm64 CGO_ENABLED=0 go build -ldflags="-s -w -X main.GitSHA=${COMMIT} -X main.Version=${VERSION}" -o bin/confd-${VERSION}-linux-arm64; \
   fi; \
+  echo "$(date) - Finished building ${platform}"
 done
 
 cd bin/

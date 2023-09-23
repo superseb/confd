@@ -1,6 +1,5 @@
 package main
 
-const Version = "0.16.1"
-
-// We want to replace this variable at build time with "-ldflags -X main.GitSHA=xxx", where const is not supported.
+// We want to replace these variables at build time 
+var Version = "dev"
 var GitSHA = ""
